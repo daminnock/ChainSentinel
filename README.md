@@ -26,7 +26,7 @@ ChainSentinel permite crear una plataforma basada en la seguridad del concepto d
 
 ## ¿Cómo funciona?
 
-Te invito a revisar nuestro [documento](https://github.com/daminnock/ChainSentinel/descentralized_SCADA.pdf) que iremos actualizando durante el desarrollo.
+Te invito a revisar nuestro [documento](https://github.com/daminnock/ChainSentinel/blob/main/descentralized_SCADA.pdf) que iremos actualizando durante el desarrollo.
 
 
 ## Tecnologías utilizadas
