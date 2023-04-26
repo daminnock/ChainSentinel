@@ -38,15 +38,15 @@ Te invito a revisar nuestro [documento](https://github.com/daminnock/ChainSentin
 
 ## Equipo
 
-**Damián Ariel Minnock**
+[**Damián Ariel Minnock**](https://github.com/daminnock)
 
-**Byron Ballesteros**
+[**Byron Ballesteros**](https://github.com/byronfba)
 
-**Francisco Sanchez**
+[**Francisco Sanchez**](https://github.com/fjsanchezm)
 
-**Cesar Augusto Galeano Torres**
+[**Cesar Augusto Galeano Torres**](https://github.com/daminnock)
 
-**Diego hermida**
+[**Diego hermida**](https://github.com/die-h)
 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
