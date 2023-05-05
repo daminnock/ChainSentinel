@@ -4,31 +4,7 @@ pragma solidity >=0.7.0 <0.9.0;
 
 contract SCADA {
 
-    struct BinaryInput {
-        bool value;
-        uint quality;
-        uint256 timestamp;
-    }
-
-    struct AnalogInput {
-        int32 value;
-        uint quality;
-        uint256 timestamp;
-    }
-
-    struct BinaryOutput {
-        bool value;
-        uint quality;
-        uint256 timestamp;
-    }
-
-    //structs inside a struct is not supported
-    /*struct Slave {
-        address slave_address;
-        BinaryInput[] binaryinput;
-        AnalogInput[] analoginput;
-        BinaryOutput[] binaryoutput;
-    }*/
+    //structs inside a struct is not supported yet. So this structure is the best option.
 
     struct slave {
         address slave_address;
@@ -75,9 +51,9 @@ contract SCADA {
     }
 
     /**
-     * @dev Function to create a Binary Input
-     * @param _slave_address Address from slave that will provide Binary Input values
-     * @param quantity Quantity of binary inputs to create
+     * @dev Function to create Binary Inputs
+     * @param _slave_address Address from slave that will provide Binary Inputs values
+     * @param quantity Quantity of Binary Inputs to create
      */
     function CreateBinaryInputs(address _slave_address, uint quantity) public {
         uint index = findSlaveIndex(_slave_address); /*TODO: simplify with mappings if possible */
@@ -87,7 +63,39 @@ contract SCADA {
             slaves[index].BI_q.push(10);
             slaves[index].BI_t.push(block.timestamp);
         }
-        emit eventSomethingNew(msg.sender, "new binary input created for address", _slave_address);
+        emit eventSomethingNew(msg.sender, "new Binary Inputs created for address", _slave_address);
+        }
+
+    /**
+     * @dev Function to create Analog Inputs
+     * @param _slave_address Address from slave that will provide Analog Inputs values
+     * @param quantity Quantity of Analog Inputs to create
+     */
+    function CreateAnalogInputs(address _slave_address, uint quantity) public {
+        uint index = findSlaveIndex(_slave_address); /*TODO: simplify with mappings if possible */
+        require(index != slaves.length, "Slave not found");
+        for (uint i = 0; i < quantity; i++) {
+            slaves[index].AI_val.push(0);
+            slaves[index].AI_q.push(10);
+            slaves[index].AI_t.push(block.timestamp);
+        }
+        emit eventSomethingNew(msg.sender, "new Analog inputs created for address", _slave_address);
+        }
+
+    /**
+     * @dev Function to create Binary Outputs
+     * @param _slave_address Address from slave that will provide Binary Outputs values
+     * @param quantity Quantity of Binary Outputs to create
+     */
+    function CreateBinaryOutputs(address _slave_address, uint quantity) public {
+        uint index = findSlaveIndex(_slave_address); /*TODO: simplify with mappings if possible */
+        require(index != slaves.length, "Slave not found");
+        for (uint i = 0; i < quantity; i++) {
+            slaves[index].BO_val.push(false);
+            slaves[index].BO_q.push(10);
+            slaves[index].BO_t.push(block.timestamp);
+        }
+        emit eventSomethingNew(msg.sender, "new Binary Outputs created for address", _slave_address);
         }
 
     /**
