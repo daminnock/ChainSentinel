@@ -3,31 +3,27 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract SCADA {
-
     //structs inside a struct is not supported yet. So this structure is the best option.
-
     struct slave {
         address slave_address;
         bool[] BI_val;
         uint[] BI_q;
-        uint256[] BI_t;
+        uint[] BI_t;
         int[] AI_val;
         uint[] AI_q;
-        uint256[] AI_t;
+        uint[] AI_t;
         bool[] BO_val;
         uint[] BO_q;
-        uint256[] BO_t;
+        uint[] BO_t;
     }
 
-
     slave[] private slaves;
-
+    
     event eventSomethingNew(address sender, string message, address _slave_address);
 
     /* ##################################################################################################################################################################### */
     /* This section contains functions for the HMI /*
     /* ##################################################################################################################################################################### */
-
     /**
      * @dev Creates a new slave with empty inputs and outputs
      * @param _slave_address Address from the slave that will provide the data
@@ -37,13 +33,13 @@ contract SCADA {
             slave_address: _slave_address,
             BI_val: new bool[](0),
             BI_q: new uint[](0),
-            BI_t: new uint256[](0),
+            BI_t: new uint[](0),
             AI_val: new int[](0),
             AI_q: new uint[](0),
-            AI_t: new uint256[](0),
+            AI_t: new uint[](0),
             BO_val: new bool[](0),
             BO_q: new uint[](0),
-            BO_t: new uint256[](0)
+            BO_t: new uint[](0)
         });
         slaves.push(newSlave);
         emit eventSomethingNew(msg.sender, "created a new slave with address", _slave_address);
@@ -56,14 +52,15 @@ contract SCADA {
      * @param quantity Quantity of Binary Inputs to create
      */
     function CreateBinaryInputs(address _slave_address, uint quantity) public {
-        uint index = findSlaveIndex(_slave_address); /*TODO: simplify with mappings if possible */
+        uint index = findSlaveIndex(_slave_address); //TODO: simplify with mappings if possible
         require(index != slaves.length, "Slave not found");
-        for (uint i = 0; i < quantity; i++) {
-            slaves[index].BI_val.push(false);
-            slaves[index].BI_q.push(10);
-            slaves[index].BI_t.push(block.timestamp);
-        }
-        emit eventSomethingNew(msg.sender, "new Binary Inputs created for address", _slave_address);
+        //Create empty arrays that will correspondes to the BI
+        bool[] memory boolArray = new bool[](quantity);
+        uint[] memory uintArray = new uint[](quantity);
+        slaves[index].BI_val = boolArray;
+        slaves[index].BI_q = uintArray;
+        slaves[index].BI_t = uintArray;       
+        emit eventSomethingNew(msg.sender, "New Binary Inputs created for address", _slave_address);
         }
 
     /**
@@ -74,12 +71,13 @@ contract SCADA {
     function CreateAnalogInputs(address _slave_address, uint quantity) public {
         uint index = findSlaveIndex(_slave_address); /*TODO: simplify with mappings if possible */
         require(index != slaves.length, "Slave not found");
-        for (uint i = 0; i < quantity; i++) {
-            slaves[index].AI_val.push(0);
-            slaves[index].AI_q.push(10);
-            slaves[index].AI_t.push(block.timestamp);
-        }
-        emit eventSomethingNew(msg.sender, "new Analog inputs created for address", _slave_address);
+        //Create empty arrays that will correspondes to the AI
+        uint[] memory uintArray = new uint[](quantity);
+        int[] memory intArray = new int[](quantity);
+        slaves[index].AI_val = intArray;
+        slaves[index].AI_q = uintArray;
+        slaves[index].AI_t = uintArray;       
+        emit eventSomethingNew(msg.sender, "New Analog Inputs created for address", _slave_address);
         }
 
     /**
@@ -90,12 +88,13 @@ contract SCADA {
     function CreateBinaryOutputs(address _slave_address, uint quantity) public {
         uint index = findSlaveIndex(_slave_address); /*TODO: simplify with mappings if possible */
         require(index != slaves.length, "Slave not found");
-        for (uint i = 0; i < quantity; i++) {
-            slaves[index].BO_val.push(false);
-            slaves[index].BO_q.push(10);
-            slaves[index].BO_t.push(block.timestamp);
-        }
-        emit eventSomethingNew(msg.sender, "new Binary Outputs created for address", _slave_address);
+        //Create empty arrays that will correspondes to the BO
+        bool[] memory boolArray = new bool[](quantity);
+        uint[] memory uintArray = new uint[](quantity);
+        slaves[index].BO_val = boolArray;
+        slaves[index].BO_q = uintArray;
+        slaves[index].BO_t = uintArray;       
+        emit eventSomethingNew(msg.sender, "New Binary Outputs created for address", _slave_address);
         }
 
     /**
@@ -122,7 +121,6 @@ contract SCADA {
         return slaves.length;
     }
 
-
      /**
      * @dev Function to send a command by setting a BO
      * @param slave_address Address of the slave
@@ -137,21 +135,17 @@ contract SCADA {
         uint BO_index,
         bool _BO_val, 
         uint _BO_q, 
-        uint256 _BO_t
+        uint _BO_t
     ) public {
         uint slave_index = findSlaveIndex(slave_address);
         require(slave_index != slaves.length, "Slave not found in DB");
         require(BO_index < slaves[slave_index].BO_val.length, "BO index out of range");
-
+        // Assign values to the specific Binary Output
         slaves[slave_index].BO_val[BO_index] = _BO_val;
         slaves[slave_index].BO_q[BO_index] = _BO_q;
         slaves[slave_index].BO_t[BO_index] = _BO_t;
-
         //TODO: send event command to the slave.
-
     }
-    
-
 
     /* ##################################################################################################################################################################### */
     /* This section contains functions for the slaves /*
@@ -172,13 +166,13 @@ contract SCADA {
     function setProcessObjects(
         bool[] memory _BI_val, 
         uint[] memory _BI_q, 
-        uint256[] memory _BI_t, 
+        uint[] memory _BI_t, 
         int[] memory _AI_val, 
         uint[] memory _AI_q, 
-        uint256[] memory _AI_t,
+        uint[] memory _AI_t,
         bool[] memory _BO_val, 
         uint[] memory _BO_q, 
-        uint256[] memory _BO_t
+        uint[] memory _BO_t
     ) public {
         uint index = findSlaveIndex(msg.sender);
         require(index != slaves.length, "Slave not found in DB");
