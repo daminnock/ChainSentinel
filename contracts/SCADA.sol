@@ -122,6 +122,34 @@ contract SCADA {
         return slaves.length;
     }
 
+
+     /**
+     * @dev Function to send a command by setting a BO
+     * @param slave_address Address of the slave
+     * @param BO_index Index of the BO that needs to be set
+     * @param _BO_val Binary Output that should receive the command
+     * @param _BO_q quality for the BO
+     * @param _BO_t timestamp of when the command was sent
+     * TODO: implement return status code
+     */
+    function SetBO(
+        address slave_address,
+        uint BO_index,
+        bool _BO_val, 
+        uint _BO_q, 
+        uint256 _BO_t
+    ) public {
+        uint slave_index = findSlaveIndex(slave_address);
+        require(slave_index != slaves.length, "Slave not found in DB");
+        require(BO_index < slaves[slave_index].BO_val.length, "BO index out of range");
+
+        slaves[slave_index].BO_val[BO_index] = _BO_val;
+        slaves[slave_index].BO_q[BO_index] = _BO_q;
+        slaves[slave_index].BO_t[BO_index] = _BO_t;
+
+        //TODO: send event command to the slave.
+
+    }
     
 
 
