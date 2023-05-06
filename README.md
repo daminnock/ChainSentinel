@@ -44,9 +44,9 @@ Te invito a revisar nuestro [documento](https://github.com/daminnock/ChainSentin
 
 [**Francisco Sanchez**](https://github.com/fjsanchezm)
 
-[**Cesar Augusto Galeano Torres**](https://github.com/daminnock)
+[**Cesar Augusto Galeano Torres**](https://github.com/cesargaleano)
 
-[**Diego hermida**](https://github.com/die-h)
+[**Diego Hermida**](https://github.com/die-h)
 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
