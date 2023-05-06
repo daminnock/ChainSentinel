@@ -155,7 +155,7 @@ describe('SCADA contract', () => {
             AI_q:   [0,2,3,10,0],
             AI_t:   [1683258250, 1683258251, 1683258252,1683258250, 1683258251],
             BO_Val: [false,false],
-            BO_q:   [10,10],
+            BO_q:   [0,0],
             BO_t:   [1683258240, 1683258241]
         };
         // Call function as slave1 to set all the process objects
@@ -179,26 +179,26 @@ describe('SCADA contract', () => {
         // Read expected values
         expect(DB[0].BO_val[0]).to.equal(false);
         expect(DB[0].BO_val[1]).to.equal(false);
-        expect(DB[0].BO_q[0]).to.equal(10);
-        expect(DB[0].BO_q[1]).to.equal(10);
+        expect(DB[0].BO_q[0]).to.equal(0);
+        expect(DB[0].BO_q[1]).to.equal(0);
         expect(DB[0].BO_t[0]).to.equal(1683258240);
         expect(DB[0].BO_t[1]).to.equal(1683258241);
 
         // HMI sends a command to a slave that does not exist
-        await expect(HMIContractConnection.SetBO("0x1111111111111111111111111111111111111111",100,true,0,1683258241))
+        await expect(HMIContractConnection.SetBO("0x1111111111111111111111111111111111111111",100,true,10,1683258241))
         .to.be.revertedWith("Slave not found in DB")
 
         // HMI sends a command to a slave that exists but the Binary Output does not exist
-        await expect(HMIContractConnection.SetBO(slave1.address,100,true,0,1683258241))
+        await expect(HMIContractConnection.SetBO(slave1.address,100,true,10,1683258241))
         .to.be.revertedWith("BO index out of range")
 
         // HMI sends a command to a slave with a Binary Output that exists correctly.
-        await expect(HMIContractConnection.SetBO(slave1.address,1,true,0,1683258299))
+        await expect(HMIContractConnection.SetBO(slave1.address,1,true,10,1683258299))
         DB = await HMIContractConnection.ReadDB();
         expect(DB[0].BO_val[0]).to.equal(false);
         expect(DB[0].BO_val[1]).to.equal(true);
-        expect(DB[0].BO_q[0]).to.equal(10);
-        expect(DB[0].BO_q[1]).to.equal(0);
+        expect(DB[0].BO_q[0]).to.equal(0);
+        expect(DB[0].BO_q[1]).to.equal(10);
         expect(DB[0].BO_t[0]).to.equal(1683258240);
         expect(DB[0].BO_t[1]).to.equal(1683258299);       
     }); 
