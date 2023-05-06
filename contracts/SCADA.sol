@@ -3,7 +3,7 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract SCADA {
-    //structs inside a struct is not supported yet. So this structure is the best option.
+    // Structs inside a struct is not supported yet. So this structure is the best option.
     struct slave {
         address slave_address;
         bool[] BI_val;
@@ -18,7 +18,7 @@ contract SCADA {
     }
 
     slave[] private slaves;
-    
+
     event eventSomethingNew(address sender, string message, address _slave_address);
 
     /* ##################################################################################################################################################################### */
