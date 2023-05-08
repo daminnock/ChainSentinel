@@ -65,7 +65,7 @@ contract SCADA {
 
     /**
      * @dev Function to create Analog Inputs
-     * @param _slave_address Address from slave that will provide Analog Inputs values
+     * @param _slave_address Address from Slave that will provide Analog Inputs values
      * @param quantity Quantity of Analog Inputs to create
      */
     function CreateAnalogInputs(address _slave_address, uint quantity) public {
