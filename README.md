@@ -54,20 +54,20 @@ Te invito a revisar nuestro [documento](https://github.com/daminnock/ChainSentin
 ## Como hacer test del Smart Contract con hardhat
 
 From terminal navigate to the path where everything is going to be saved and get files from repository
-´´´
+```
 git clone https://github.com/daminnock/ChainSentinel.git
-´´´
+```
 Then install hardhat
-´´´
+```
 npm init
 npm install --save hardhat
 npm install --save-dev @nomicfoundation/hardhat-toolbox
 npx hardhat
-´´´
+```
 In SCADA.js there is code to test the Smart Contract. With hardhat ready you should execute:
-´´´
+```
 npx hardhat test
-´´´
+```
 
 
 
