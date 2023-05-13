@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang=""en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Formulario</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #F5F5F5;
+            }
+
+            .container {
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #FFFFFF;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                border-radius: 10px;
+                max-width: 1200px;
+            }
+
+            .form-input {
+                display: block;
+                margin-bottom: 10px;
+                font-size: 16px;
+                border: 2px solid #CCCCCC;
+                border-radius: 4px;
+                padding: 10px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .btn {
+                background-color: #4CAF50;
+                color: #FFFFFF;
+                font-size: 16px;
+                border: none;
+                border-radius: 4px;
+                padding: 10px 20px;
+                cursor: pointer;
+            }
+
+            .btn:hover {
+                background-color: #3E8E41;
+            }
+        </style>
+    </head>
+    <body>
+        <h2 style="text-align: center;">Engineering Functions</h2>
+        <div class="container">
+            <h1>Slave Creation</h1>
+            <form>
+                <label for="SlaveAddress">Address for the slave:</label>
+                <input type="text" id="SlaveAddress" name="SlaveAddress" class="form-input">
+
+                <button type="button" onclick="CreateSlave(document.getElementById('SlaveAddress').value)" class="btn">Create slave</button>
+            </form>
+            <br><br>
+            <label for="Slaves_Quantity">Get total slaves:</label>
+            <input type="text" id="Slaves_Quantity" name="Slaves_Quantity" readonly>
+            <button onclick="GetTotalSlaves()">Get</button>
+                
+        </div>
+    </body>
+    <br><br>
+    <body>
+        <div class="container">
+            <h1>Process Objects for slave</h1>
+            <form>
+                
+        <label for="BI_Quantity">Binary Input Quantity:</label>
+        <input type="text" id="BI_Quantity" name="BI_Quantity">
+        <button onclick="CreateBinaryInputs(document.getElementById('SlaveAddress').value, document.getElementById('BI_Quantity').value)">Create</button>
+        <br><br>
+
+        <label for="BO_Quantity">Binary Output Quantity:</label>
+        <input type="text" id="BO_Quantity" name="BO_Quantity">
+        <button onclick="CreateBinaryOutputs(document.getElementById('SlaveAddress').value, document.getElementById('BO_Quantity').value)">Create</button>
+        <br><br>
+
+        <label for="AI_Quantity">Analog Input Quantity:</label>
+        <input type="text" id="AI_Quantity" name="AI_Quantity">
+        <button onclick="CreateAnalogInputs(document.getElementById('SlaveAddress').value, document.getElementById('AI_Quantity').value)">Create</button>
+            </form>
+        </div>
+    </body>
+    <br>
+    </div>
+    <hr>
+    </body>
+        <h2 style="text-align: center;">Read Database as an HMI</h2>
+        <div class="container">
+            <button onclick="ReadDB()">Read</button>
+            <br>
+            <textarea id="DB" rows="20" cols="150"></textarea>	
+        </div>
+    </body>	
+    </html>
+    <br>
+    </div>
+    <hr>
+    </body>
+        <h2 style="text-align: center;">Write as a PLC</h2>
+            <div class="container">
+            <label for="BI_val">BI_val:</label>
+            <input type="text" id="BI_val" name="BI_val">
+            <label for="BI_q">BI_q:</label>
+            <input type="text" id="BI_q" name="BI_q">
+            <label for="BI_t">BI_t:</label>
+            <input type="text" id="BI_t" name="BI_t">
+            <br><br>
+            <label for="AI_val">AI_val:</label>
+            <input type="text" id="AI_val" name="AI_val">
+            <label for="AI_q">AI_q:</label>
+            <input type="text" id="AI_q" name="AI_q">
+            <label for="AI_t">AI_t:</label>
+            <input type="text" id="AI_t" name="AI_t">
+            <br><br>
+            <label for="BO_val">BO_val:</label>
+            <input type="text" id="BO_val" name="BO_val">
+            <label for="BO_q">BO_q:</label>
+            <input type="text" id="BO_q" name="BO_q">
+            <label for="BO_t">BO_t:</label>
+            <input type="text" id="BO_t" name="BO_t">            
+
+            <br>
+            <button onclick="setProcessObjects(
+                document.getElementById('BI_val').value,
+                document.getElementById('BI_q').value,
+                document.getElementById('BI_t').value,
+                document.getElementById('AI_val').value,
+                document.getElementById('AI_q').value,
+                document.getElementById('AI_t').value,
+                document.getElementById('BO_val').value,
+                document.getElementById('BO_q').value,
+                document.getElementById('BO_t').value,           
+                )">Write</button>
+        </div>
+    </body>	    
+
+        <body>
+            <script 
+                src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+                type="application/javascript"
+            ></script>
+
+            <script>
+                // CONTRACT_ABI are lines that correspond to ABI object from artifacts/contracts\SCADA.sol/SCADA.json
+                const CONTRACT_ABI = [
+                                    {
+                                    "anonymous": false,
+                                    "inputs": [
+                                        {
+                                        "indexed": false,
+                                        "internalType": "address",
+                                        "name": "sender",
+                                        "type": "address"
+                                        },
+                                        {
+                                        "indexed": false,
+                                        "internalType": "string",
+                                        "name": "message",
+                                        "type": "string"
+                                        },
+                                        {
+                                        "indexed": false,
+                                        "internalType": "address",
+                                        "name": "_slave_address",
+                                        "type": "address"
+                                        }
+                                    ],
+                                    "name": "eventSomethingNew",
+                                    "type": "event"
+                                    },
+                                    {
+                                    "inputs": [
+                                        {
+                                        "internalType": "address",
+                                        "name": "_slave_address",
+                                        "type": "address"
+                                        },
+                                        {
+                                        "internalType": "uint256",
+                                        "name": "quantity",
+                                        "type": "uint256"
+                                        }
+                                    ],
+                                    "name": "CreateAnalogInputs",
+                                    "outputs": [],
+                                    "stateMutability": "nonpayable",
+                                    "type": "function"
+                                    },
+                                    {
+                                    "inputs": [
+                                        {
+                                        "internalType": "address",
+                                        "name": "_slave_address",
+                                        "type": "address"
+                                        },
+                                        {
+                                        "internalType": "uint256",
+                                        "name": "quantity",
+                                        "type": "uint256"
+                                        }
+                                    ],
+                                    "name": "CreateBinaryInputs",
+                                    "outputs": [],
+                                    "stateMutability": "nonpayable",
+                                    "type": "function"
+                                    },
+                                    {
+                                    "inputs": [
+                                        {
+                                        "internalType": "address",
+                                        "name": "_slave_address",
+                                        "type": "address"
+                                        },
+                                        {
+                                        "internalType": "uint256",
+                                        "name": "quantity",
+                                        "type": "uint256"
+                                        }
+                                    ],
+                                    "name": "CreateBinaryOutputs",
+                                    "outputs": [],
+                                    "stateMutability": "nonpayable",
+                                    "type": "function"
+                                    },
+                                    {
+                                    "inputs": [
+                                        {
+                                        "internalType": "address",
+                                        "name": "_slave_address",
+                                        "type": "address"
+                                        }
+                                    ],
+                                    "name": "CreateSlave",
+                                    "outputs": [],
+                                    "stateMutability": "nonpayable",
+                                    "type": "function"
+                                    },
+                                    {
+                                    "inputs": [],
+                                    "name": "ReadDB",
+                                    "outputs": [
+                                        {
+                                        "components": [
+                                            {
+                                            "internalType": "address",
+                                            "name": "slave_address",
+                                            "type": "address"
+                                            },
+                                            {
+                                            "internalType": "bool[]",
+                                            "name": "BI_val",
+                                            "type": "bool[]"
+                                            },
+                                            {
+                                            "internalType": "uint256[]",
+                                            "name": "BI_q",
+                                            "type": "uint256[]"
+                                            },
+                                            {
+                                            "internalType": "uint256[]",
+                                            "name": "BI_t",
+                                            "type": "uint256[]"
+                                            },
+                                            {
+                                            "internalType": "int256[]",
+                                            "name": "AI_val",
+                                            "type": "int256[]"
+                                            },
+                                            {
+                                            "internalType": "uint256[]",
+                                            "name": "AI_q",
+                                            "type": "uint256[]"
+                                            },
+                                            {
+                                            "internalType": "uint256[]",
+                                            "name": "AI_t",
+                                            "type": "uint256[]"
+                                            },
+                                            {
+                                            "internalType": "bool[]",
+                                            "name": "BO_val",
+                                            "type": "bool[]"
+                                            },
+                                            {
+                                            "internalType": "uint256[]",
+                                            "name": "BO_q",
+                                            "type": "uint256[]"
+                                            },
+                                            {
+                                            "internalType": "uint256[]",
+                                            "name": "BO_t",
+                                            "type": "uint256[]"
+                                            }
+                                        ],
+                                        "internalType": "struct SCADA.slave[]",
+                                        "name": "",
+                                        "type": "tuple[]"
+                                        }
+                                    ],
+                                    "stateMutability": "view",
+                                    "type": "function"
+                                    },
+                                    {
+                                    "inputs": [
+                                        {
+                                        "internalType": "address",
+                                        "name": "slave_address",
+                                        "type": "address"
+                                        },
+                                        {
+                                        "internalType": "uint256",
+                                        "name": "BO_index",
+                                        "type": "uint256"
+                                        },
+                                        {
+                                        "internalType": "bool",
+                                        "name": "_BO_val",
+                                        "type": "bool"
+                                        },
+                                        {
+                                        "internalType": "uint256",
+                                        "name": "_BO_q",
+                                        "type": "uint256"
+                                        },
+                                        {
+                                        "internalType": "uint256",
+                                        "name": "_BO_t",
+                                        "type": "uint256"
+                                        }
+                                    ],
+                                    "name": "SetBO",
+                                    "outputs": [],
+                                    "stateMutability": "nonpayable",
+                                    "type": "function"
+                                    },
+                                    {
+                                    "inputs": [
+                                        {
+                                        "internalType": "bool[]",
+                                        "name": "_BI_val",
+                                        "type": "bool[]"
+                                        },
+                                        {
+                                        "internalType": "uint256[]",
+                                        "name": "_BI_q",
+                                        "type": "uint256[]"
+                                        },
+                                        {
+                                        "internalType": "uint256[]",
+                                        "name": "_BI_t",
+                                        "type": "uint256[]"
+                                        },
+                                        {
+                                        "internalType": "int256[]",
+                                        "name": "_AI_val",
+                                        "type": "int256[]"
+                                        },
+                                        {
+                                        "internalType": "uint256[]",
+                                        "name": "_AI_q",
+                                        "type": "uint256[]"
+                                        },
+                                        {
+                                        "internalType": "uint256[]",
+                                        "name": "_AI_t",
+                                        "type": "uint256[]"
+                                        },
+                                        {
+                                        "internalType": "bool[]",
+                                        "name": "_BO_val",
+                                        "type": "bool[]"
+                                        },
+                                        {
+                                        "internalType": "uint256[]",
+                                        "name": "_BO_q",
+                                        "type": "uint256[]"
+                                        },
+                                        {
+                                        "internalType": "uint256[]",
+                                        "name": "_BO_t",
+                                        "type": "uint256[]"
+                                        }
+                                    ],
+                                    "name": "setProcessObjects",
+                                    "outputs": [],
+                                    "stateMutability": "nonpayable",
+                                    "type": "function"
+                                    }
+                ]
+                var CONTRACT_ADDRESS = ""
+                let signer;
+                let contract;
+
+                // Create a provider that will let us send commands with ethers library
+                // There are several providers, but here we use Web3Provider
+                const provider = new ethers.providers.Web3Provider(
+                    window.ethereum,
+                    "goerli"
+                );
+                
+                // Instruction to request the provider the addresses that are connected
+                provider.send("eth_requestAccounts", []).then(() => {
+                    provider.listAccounts().then((accounts) => {
+                        signer = provider.getSigner(accounts[0]); // Who is signing our contract.
+                        contract = new ethers.Contract(
+                            CONTRACT_ADDRESS,
+                            CONTRACT_ABI,
+                            signer
+                        );
+                    });
+
+                });
+
+                // ######### Functions for Smart Contract #########
+                async function CreateSlave(slave_address) {
+                    await contract.createSlave(slave_address);
+                }
+
+                async function GetTotalSlaves() {
+                    document.getElementById("Slaves_Quantity").value = await contract.GetTotalSlaves();
+                }
+
+                //CreateBinaryInputs(address _slave_address, uint quantity) 
+                async function CreateBinaryInputs(slave_address, quantity) {
+                    await contract.CreateBinaryInputs(slave_address, quantity);
+                }                
+
+                //CreateBinaryInputs(address _slave_address, uint quantity) 
+                async function CreateBinaryOutputs(slave_address, quantity) {
+                    await contract.CreateBinaryOutputs(slave_address, quantity);
+                }  
+
+                //CreateBinaryInputs(address _slave_address, uint quantity) 
+                async function CreateAnalogInputs(slave_address, quantity) {
+                    await contract.CreateAnalogInputs(slave_address, quantity);
+                }  
+
+                async function ReadDB() {
+                    document.getElementById("DB").value = await contract.ReadDB();
+                }       
+                
+                async function setProcessObjects(BI_val, BI_q, BI_t, AI_val, AI_q, AI_t, BO_val, BO_q, BO_t) {
+                    await contract.setProcessObjects(
+                        BI_val,
+                        BI_q,
+                        BI_t,
+                        AI_val,
+                        AI_q,
+                        AI_t,
+                        BO_val,
+                        BO_q,
+                        BO_t
+                    )
+
+                } 
+
+            </script>

@@ -5,6 +5,7 @@ cache/
 package-lock.json
 package.json
 scripts/
+.env
 
 # Logs
 logs

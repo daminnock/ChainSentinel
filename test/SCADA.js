@@ -27,11 +27,15 @@ describe('SCADA contract', () => {
         const [owner] = await ethers.getSigners();
         
         // Create a slave with a dummy address. Also create 2 binary inputs.
-        hardhatSCADA.CreateSlave("0x1111111111111111111111111111111111111111")
+        var n_slave = await hardhatSCADA.CreateSlave("0x1111111111111111111111111111111111111111")
+        var n_slave = await hardhatSCADA.GetTotalSlaves()
+        expect(n_slave).to.equal(0)
         hardhatSCADA.CreateBinaryInputs("0x1111111111111111111111111111111111111111",2)
 
         // Create a slave with a dummy address. Also create 3 binary inputs.
         hardhatSCADA.CreateSlave("0x2222222222222222222222222222222222222222")
+        n_slave = await hardhatSCADA.GetTotalSlaves()
+        expect(n_slave).to.equal(1)
         hardhatSCADA.CreateBinaryInputs("0x2222222222222222222222222222222222222222",3)
 
         // Create again the Binary Inputs to the first slave.
@@ -151,10 +155,10 @@ describe('SCADA contract', () => {
             BI_val: [true, false, true],
             BI_q:   [0, 0, 0],
             BI_t:   [1683258250, 1683258251, 1683258252],
-            AI_Val: [12345,6789,101112,-1314,0],
+            AI_val: [12345,6789,101112,-1314,0],
             AI_q:   [0,2,3,10,0],
             AI_t:   [1683258250, 1683258251, 1683258252,1683258250, 1683258251],
-            BO_Val: [false,false],
+            BO_val: [false,false],
             BO_q:   [0,0],
             BO_t:   [1683258240, 1683258241]
         };
@@ -163,10 +167,10 @@ describe('SCADA contract', () => {
             processObjects.BI_val,
             processObjects.BI_q,
             processObjects.BI_t,
-            processObjects.AI_Val,
+            processObjects.AI_val,
             processObjects.AI_q,
             processObjects.AI_t,
-            processObjects.BO_Val,
+            processObjects.BO_val,
             processObjects.BO_q,
             processObjects.BO_t
         );
@@ -200,7 +204,7 @@ describe('SCADA contract', () => {
         expect(DB[0].BO_q[0]).to.equal(0);
         expect(DB[0].BO_q[1]).to.equal(10);
         expect(DB[0].BO_t[0]).to.equal(1683258240);
-        expect(DB[0].BO_t[1]).to.equal(1683258299);       
+        expect(DB[0].BO_t[1]).to.equal(1683258299);      
     }); 
     
 });

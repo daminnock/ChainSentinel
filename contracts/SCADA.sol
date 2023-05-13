@@ -18,6 +18,7 @@ contract SCADA {
     }
 
     slave[] private slaves;
+    uint private n_slaves;
 
     event eventSomethingNew(address sender, string message, address _slave_address);
 
@@ -42,8 +43,18 @@ contract SCADA {
             BO_t: new uint[](0)
         });
         slaves.push(newSlave);
+        n_slaves++;
+
         emit eventSomethingNew(msg.sender, "created a new slave with address", _slave_address);
         /*TODO: Check if the slave does not already exist */
+    }
+
+    /**
+     * @dev Function to count all the slaves created
+     * @return Total number of slaves created
+     */
+    function GetTotalSlaves() public view returns (uint) {
+        return n_slaves-1;
     }
 
     /**
