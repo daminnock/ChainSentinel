@@ -69,6 +69,34 @@ In SCADA.js there is code to test the Smart Contract. With hardhat ready you sho
 npx hardhat test
 ```
 
+## Como desplegar y probar el smart contract
+Previous commands related to hardhat should be executed. Also:
+
+In terminal install dotenv and lite-server:
+```
+npm install dotenv --save
+npm i -g lite-server 
+```
+
+Create a .env file where you should declare 2 variables:
+
+Go to alchemy. Log in. Obtain url from there. Declare variable in .env something like:
+*STAGING_ALCHEMY_KEY* = https://eth-goerli.g.alchemy.com/v2/zaraza-z4r4z4-2r424
+
+Obtain token private key from metamask. Get sure to select Goerli.
+*PRIVATE_KEY* = 123a456b.....789xyz
+
+```
+npx hardhat compile
+npx hardhat run scripts/deploy.js --network goerli
+```
+Then execute lite-server
+```
+cd src/
+lite-server //execute lite-server in src folder
+```
+
+
 
 
 
