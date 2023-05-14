@@ -81,19 +81,24 @@ npm i -g lite-server
 Create a .env file where you should declare 2 variables:
 
 Go to alchemy. Log in. Obtain url from there. Declare variable in .env something like:
-*STAGING_ALCHEMY_KEY* = https://eth-goerli.g.alchemy.com/v2/zaraza-z4r4z4-2r424
+
+*STAGING_ALCHEMY_KEY = https://eth-goerli.g.alchemy.com/v2/zaraza-z4r4z4-2r424*
 
 Obtain token private key from metamask. Get sure to select Goerli.
-*PRIVATE_KEY* = 123a456b.....789xyz
+
+*PRIVATE_KEY = 123a456b.....789xyz*
 
 ```
 npx hardhat compile
 npx hardhat run scripts/deploy.js --network goerli
 ```
+Then you will get an output in terminal like:
+SCADA deployed to: 0xABCDE1234567890ABCDE1234567890ABCDE12345
+You need to copy that address to index.html in var CONTRACT_ADDRESS
 Then execute lite-server
 ```
 cd src/
-lite-server //execute lite-server in src folder
+lite-server
 ```
 
 

@@ -47,6 +47,13 @@
     <body>
         <h2 style="text-align: center;">Engineering Functions</h2>
         <div class="container">
+            <label for="contractAddress">Contract Address:</label>
+            <input type="text" id="contractAddress" name="contractAddress" class="form-input" readonly>     
+        </div>
+    </body>
+    <br>
+    <body>
+        <div class="container">
             <h1>Slave Creation</h1>
             <form>
                 <label for="SlaveAddress">Address for the slave:</label>
@@ -55,9 +62,9 @@
                 <button type="button" onclick="CreateSlave(document.getElementById('SlaveAddress').value)" class="btn">Create slave</button>
             </form>
             <br><br>
-            <label for="Slaves_Quantity">Get total slaves:</label>
+            <label for="Slaves_Quantity">Get last slave index:</label>
             <input type="text" id="Slaves_Quantity" name="Slaves_Quantity" readonly>
-            <button onclick="GetTotalSlaves()">Get</button>
+            <button type="button" onclick="GetTotalSlaves()" class="btn">Get</button>
                 
         </div>
     </body>
@@ -69,17 +76,17 @@
                 
         <label for="BI_Quantity">Binary Input Quantity:</label>
         <input type="text" id="BI_Quantity" name="BI_Quantity">
-        <button onclick="CreateBinaryInputs(document.getElementById('SlaveAddress').value, document.getElementById('BI_Quantity').value)">Create</button>
+        <button type="button" onclick="CreateBinaryInputs(document.getElementById('SlaveAddress').value, document.getElementById('BI_Quantity').value)" class="btn">Create</button>
         <br><br>
 
         <label for="BO_Quantity">Binary Output Quantity:</label>
         <input type="text" id="BO_Quantity" name="BO_Quantity">
-        <button onclick="CreateBinaryOutputs(document.getElementById('SlaveAddress').value, document.getElementById('BO_Quantity').value)">Create</button>
+        <button type="button" onclick="CreateBinaryOutputs(document.getElementById('SlaveAddress').value, document.getElementById('BO_Quantity').value)" class="btn">Create</button>
         <br><br>
 
         <label for="AI_Quantity">Analog Input Quantity:</label>
         <input type="text" id="AI_Quantity" name="AI_Quantity">
-        <button onclick="CreateAnalogInputs(document.getElementById('SlaveAddress').value, document.getElementById('AI_Quantity').value)">Create</button>
+        <button type="button" onclick="CreateAnalogInputs(document.getElementById('SlaveAddress').value, document.getElementById('AI_Quantity').value)" class="btn">Create</button>
             </form>
         </div>
     </body>
@@ -89,9 +96,9 @@
     </body>
         <h2 style="text-align: center;">Read Database as an HMI</h2>
         <div class="container">
-            <button onclick="ReadDB()">Read</button>
-            <br>
-            <textarea id="DB" rows="20" cols="150"></textarea>	
+            <button type="button" onclick="ReadDB()" class="btn">Read</button>
+            <br><br>
+            <textarea id="DB" rows="20" cols="100"></textarea>	
         </div>
     </body>	
     </html>
@@ -122,18 +129,21 @@
             <label for="BO_t">BO_t:</label>
             <input type="text" id="BO_t" name="BO_t">            
 
-            <br>
-            <button onclick="setProcessObjects(
-                document.getElementById('BI_val').value,
-                document.getElementById('BI_q').value,
-                document.getElementById('BI_t').value,
-                document.getElementById('AI_val').value,
-                document.getElementById('AI_q').value,
-                document.getElementById('AI_t').value,
-                document.getElementById('BO_val').value,
-                document.getElementById('BO_q').value,
-                document.getElementById('BO_t').value,           
-                )">Write</button>
+            <br><br>
+            <button type="button" onclick="setProcessObjects(
+                document.getElementById('BI_val').value.split(',').map(val => val.trim() === 'true'),
+                document.getElementById('BI_q').value.split(',').map(val => parseInt(val.trim())),
+                document.getElementById('BI_t').value.split(',').map(val => parseInt(val.trim())),
+                document.getElementById('AI_val').value.split(',').map(val => parseInt(val.trim())),
+                document.getElementById('AI_q').value.split(',').map(val => parseInt(val.trim())),
+                document.getElementById('AI_t').value.split(',').map(val => parseInt(val.trim())),
+                document.getElementById('BO_val').value.split(',').map(val => val.trim() === 'true'),
+                document.getElementById('BO_q').value.split(',').map(val => parseInt(val.trim())),
+                document.getElementById('BO_t').value.split(',').map(val => parseInt(val.trim()))           
+                )" class="btn">Write</button>
+  };
+
+
         </div>
     </body>	    
 
@@ -236,6 +246,19 @@
                                     "name": "CreateSlave",
                                     "outputs": [],
                                     "stateMutability": "nonpayable",
+                                    "type": "function"
+                                    },
+                                    {
+                                    "inputs": [],
+                                    "name": "GetTotalSlaves",
+                                    "outputs": [
+                                        {
+                                        "internalType": "uint256",
+                                        "name": "",
+                                        "type": "uint256"
+                                        }
+                                    ],
+                                    "stateMutability": "view",
                                     "type": "function"
                                     },
                                     {
@@ -390,9 +413,12 @@
                                     "type": "function"
                                     }
                 ]
-                var CONTRACT_ADDRESS = ""
+                // let CONTRACT_ADDRESS = "0xabcd----789"
+                let CONTRACT_ADDRESS = ""
                 let signer;
                 let contract;
+
+                document.getElementById("contractAddress").value = CONTRACT_ADDRESS;
 
                 // Create a provider that will let us send commands with ethers library
                 // There are several providers, but here we use Web3Provider
@@ -411,12 +437,13 @@
                             signer
                         );
                     });
-
                 });
 
                 // ######### Functions for Smart Contract #########
                 async function CreateSlave(slave_address) {
-                    await contract.createSlave(slave_address);
+                    await contract.CreateSlave(slave_address);
+                    console.log("Executed CreateSlave function");
+                    console.log("Slave_address is ${slave_address}");
                 }
 
                 async function GetTotalSlaves() {
@@ -425,24 +452,48 @@
 
                 //CreateBinaryInputs(address _slave_address, uint quantity) 
                 async function CreateBinaryInputs(slave_address, quantity) {
+                    console.log("Executing CreateBinaryInputs function");
+                    console.log(slave_address)
+                    console.log(quantity);
                     await contract.CreateBinaryInputs(slave_address, quantity);
+                    console.log("Executed CreateBinaryInputs function");
                 }                
 
                 //CreateBinaryInputs(address _slave_address, uint quantity) 
                 async function CreateBinaryOutputs(slave_address, quantity) {
+                    console.log("Executing CreateBinaryOutputs function"); 
                     await contract.CreateBinaryOutputs(slave_address, quantity);
+                    console.log(slave_address)
+                    console.log(quantity);
                 }  
 
                 //CreateBinaryInputs(address _slave_address, uint quantity) 
                 async function CreateAnalogInputs(slave_address, quantity) {
+                    console.log("Executing CreateAnalogInputs function");
                     await contract.CreateAnalogInputs(slave_address, quantity);
+                    console.log(slave_address)
+                    console.log(quantity);
                 }  
 
                 async function ReadDB() {
-                    document.getElementById("DB").value = await contract.ReadDB();
+
+                    var response = await contract.ReadDB();
+                    document.getElementById("DB").value = JSON.stringify(response);//response.join('');
+                    console.log("Executed ReadDB. Output:");
+                    console.log(response);
                 }       
                 
                 async function setProcessObjects(BI_val, BI_q, BI_t, AI_val, AI_q, AI_t, BO_val, BO_q, BO_t) {
+                    console.log("Executing SetProcessObjects")
+                    console.log(BI_val)
+                    console.log(BI_q)
+                    console.log(BI_t)
+                    console.log(AI_val)
+                    console.log(AI_q)
+                    console.log(AI_t)
+                    console.log(BO_val)
+                    console.log(BO_q)
+                    console.log(BO_t)
                     await contract.setProcessObjects(
                         BI_val,
                         BI_q,
@@ -454,7 +505,5 @@
                         BO_q,
                         BO_t
                     )
-
                 } 
-
             </script>
