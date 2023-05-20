@@ -16,6 +16,12 @@ En algunos casos, la vida de las personas depende de forma muy sensible en siste
 
 También existe un interés en el acceso libre y seguro a información de la red eléctrica bajo el moderno concepto de las smart grids, donde un individuo puede proveer energía a la red y ganar dinero por ello.
 
+## Demos
+
+[**Web Demo**](https://github.com/daminnock](https://chainsentinel.epikapp.io/)
+
+[**Video introductorio**](https://youtu.be/neJ6SwkNwJk)
+
 
 ## Solución
 
