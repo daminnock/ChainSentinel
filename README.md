@@ -18,7 +18,7 @@ También existe un interés en el acceso libre y seguro a información de la red
 
 ## Demos
 
-[**Web Demo**](https://github.com/daminnock](https://chainsentinel.epikapp.io/)
+[**Web Demo**](https://chainsentinel.epikapp.io/)
 
 [**Video introductorio**](https://youtu.be/neJ6SwkNwJk)
 
